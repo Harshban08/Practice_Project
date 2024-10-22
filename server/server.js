@@ -1,7 +1,11 @@
 const express = require('express');
-const connectDb = require("./config/dbConnection");
-const errorHandler = require("./middleware.errHandler");
+const connectDb = require("./config/dbConnection.js");
+const errorHandler = require("./middlewares/errorHandler");
 const cors = require("cors")
+
+//env file config+
+const dotenv = require("dotenv");
+dotenv.config();
 
 connectDb();
 const app = express();
