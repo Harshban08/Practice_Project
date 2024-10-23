@@ -9,14 +9,29 @@ dotenv.config();
 
 connectDb();
 const app = express();
-const PORT = 5000;
+app.set('view engine','hbs');
+const PORT =  5000;
 
 app.use(express.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.send('Working');
+    res.send('Working hello');
 });
+
+app.get('/home',(req,res)=>{
+    res.render("home",{
+        username: "Harsh",
+        posts: "flana"
+    })
+})
+
+app.get('/all',(req,res)=>{
+    res.render("all",{
+        username1: "Saransh",
+        username2: "Bagga"
+    })
+})
 
 app.use(errorHandler);
 
