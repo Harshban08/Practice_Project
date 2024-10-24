@@ -27,11 +27,31 @@ app.get('/home',(req,res)=>{
 })
 
 app.get('/all',(req,res)=>{
-    res.render("all",{
-        username1: "Saransh",
-        username2: "Bagga"
+    res.render("users",{
+        username: "Saransh",
+        // username2: "Bagga"
+        // users:[{username: "Saransh",
+        //     age:23},{id:1,username: "Bagga",
+        //     age:24}]
     })
 })
+
+app.get('/allusers',(req,res)=>{
+    // res.render("users",{
+    //     users:[{username: "Saransh",
+    //     age:23},{id:1,username: "Bagga",
+    //     age:24}]
+    // })
+    const allusers = [
+        {name:"Harsh", age:20},
+        {name:"Saransh", age:20},
+        {name:"Bagga",age:19}
+    ];
+    res.render('users',{users:allusers});
+})
+
+// //userRegistration
+// app.use("api/register",require("./routes/userRoutes"));
 
 app.use(errorHandler);
 
