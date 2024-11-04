@@ -1,60 +1,56 @@
-const express = require('express');
-const connectDb = require("./config/dbConnection.js");
+const express = require("express");
+const connectDb = require("./config/dbConnection");
 const errorHandler = require("./middlewares/errorHandler");
-const cors = require("cors")
-
-//env file config+
+const cors = require("cors");
 const dotenv = require("dotenv");
-dotenv.config();
+const path = require("path");
+const hbs = require("hbs");
 
-connectDb();
+dotenv.config();
+connectDb(); // Connect to the database
 const app = express();
-app.set('view engine','hbs');
-const PORT =  5000;
+const PORT = process.env.PORT || 3000;
+
+// Set up Handlebars as the view engine
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views')); // Ensure this points to the right directory
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 app.use(cors());
 
+// Routes
 app.get('/', (req, res) => {
-    res.send('Working hello');
+    res.send('Working');
 });
 
-app.get('/home',(req,res)=>{
-    res.render("home",{
-        username: "Harsh",
-        posts: "flana"
-    })
-})
+// Register Handlebars partials
+hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
-app.get('/all',(req,res)=>{
-    res.render("users",{
-        username: "Saransh",
-        // username2: "Bagga"
-        // users:[{username: "Saransh",
-        //     age:23},{id:1,username: "Bagga",
-        //     age:24}]
-    })
-})
+// Home route
+app.get("/home", (req, res) => {
+    res.render("home", {
+        username: "Jai Chopra",
+        posts: "time pass"
+    });
+});
 
-app.get('/allusers',(req,res)=>{
-    // res.render("users",{
-    //     users:[{username: "Saransh",
-    //     age:23},{id:1,username: "Bagga",
-    //     age:24}]
-    // })
-    const allusers = [
-        {name:"Harsh", age:20},
-        {name:"Saransh", age:20},
-        {name:"Bagga",age:19}
-    ];
-    res.render('users',{users:allusers});
-})
+// All users route (Assuming 'users' is defined somewhere)
+app.get("/alluser", (req, res) => {
+    const users = []; // Replace with actual users array
+    res.render("alluser", {
+        users: users, 
+    });
+});
 
-// //userRegistration
-// app.use("api/register",require("./routes/userRoutes"));
+// User routes
+app.use("/api/register", require("./routes/userRoutes")); // Registration route
+app.use("/api/login", require("./routes/userRoutes")); // Login route
 
-app.use(errorHandler);
+// Error handling middleware
+app.use(errorHandler); // Use your error handler middleware
 
+// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http:localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
